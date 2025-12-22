@@ -1,4 +1,5 @@
-﻿      <!-- Begin Slider Area -->
+﻿@model List<Card>
+     <!-- Begin Slider Area -->
 <div class="slider-area">
     <!-- Main Slider -->
     <div class="swiper-container main-slider swiper-arrow with-bg_white">
@@ -82,7 +83,7 @@
     <div class="container">
         <div class="shipping-bg">
             <div class="row shipping-wrap">
-                @foreach(Card card in ViewBag.Cards)
+                @foreach(Card card in Model)
                 {
                 <div class="col-lg-4 col-md-6">
                     <div class="shipping-item">

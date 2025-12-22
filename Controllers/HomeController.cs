@@ -17,8 +17,7 @@ namespace Pronia.Controllers
         {
             var cards = _context.Cards.ToList();
 
-            ViewBag.Cards = cards;
-            return View();
+            return View(cards);
         }
     }
 }
