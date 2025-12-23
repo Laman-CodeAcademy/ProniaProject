@@ -9,7 +9,7 @@
                         <h4 class="card-title">Create New Card</h4>
                         <p class="card-description">Fill the form to add a new card</p>
 
-                        <form asp-action="Create" method="post" enctype="multipart/form-data" class="forms-sample">
+                        <form asp-action="Update" method="post" class="forms-sample">
                             <div class="form-group">
                                 <label asp-for="Title">Title</label>
                                 <input asp-for="Title" class="form-control" placeholder="Enter title" />
@@ -28,7 +28,7 @@
                                 <span asp-validation-for="Image" class="text-danger"></span>
                             </div>
 
-                            <button type="submit" class="btn btn-primary me-2">Create</button>
+                            <button type="submit" class="btn btn-primary me-2">Update</button>
                             <a asp-action="Index" class="btn btn-light">Cancel</a>
                         </form>
 

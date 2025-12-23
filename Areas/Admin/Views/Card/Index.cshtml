@@ -6,7 +6,7 @@
 </div>
 
 <table class="table">
-    <thead class="thead-dark">
+    <thead class="table-dark">
         <tr>
             <th scope="col">Id</th>
             <th scope="col">Image</th>
@@ -24,8 +24,13 @@
                 <td>@card.Title</td>
                 <td>@card.Description</td>
                 <td>
-                    <a class="btn btn-danger">Delete</a>
-                    <a class="btn btn-warning">Update</a>
+                    <form asp-area="admin" asp-controller="card" asp-action="Delete" asp-route-id="@card.Id" method="post">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                    <a asp-area="admin"
+                       asp-controller="card"
+                       asp-action="Update"
+                       asp-route-id="@card.Id" class="btn btn-warning">Update</a>
                 </td>
             </tr>
         }
