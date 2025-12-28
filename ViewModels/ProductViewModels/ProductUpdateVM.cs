@@ -1,12 +1,10 @@
-﻿using Pronia.Models.Common;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Pronia.Models
+namespace Pronia.ViewModels.ProductViewModels
 {
-    public class Product : BaseEntity
+    public class ProductUpdateVM
     {
         public int Id { get; set; }
-
         [Required]
         public string Name { get; set; }
         [Required]
@@ -17,8 +15,8 @@ namespace Pronia.Models
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
         [Required]
-        public string MainImageUrl { get; set; }
+        public IFormFile? MainImage { get; set; }
         [Required]
-        public string? HoverImageUrl { get; set; }
+        public IFormFile? HoverImage { get; set; }
     }
 }

@@ -2,8 +2,7 @@
 using Pronia.Contexts;
 using Pronia.Models;
 
-namespace Pronia.Areas.Admin.Controllers
-{
+namespace Pronia.Areas.Admin.Controllers;
     [Area("Admin")]
     public class CategoryController : Controller
     {
@@ -101,5 +100,4 @@ namespace Pronia.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-    }
 }

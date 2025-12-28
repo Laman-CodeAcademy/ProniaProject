@@ -14,5 +14,6 @@ namespace Pronia.Contexts
         public DbSet<Card> Cards { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<ProductImage> ProductImage { get; set; }
     }
 }
