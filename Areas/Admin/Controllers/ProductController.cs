@@ -89,6 +89,7 @@ namespace Pronia.Areas.Admin.Controllers;
             SKU = vm.SKU,
             CategoryId = vm.CategoryId,
             Price = vm.Price,
+            Rating = vm.Rating,
             MainImageUrl = mainImageUniqueName,
             HoverImageUrl = hoverImageUniqueName,
 
@@ -118,6 +119,7 @@ namespace Pronia.Areas.Admin.Controllers;
             SKU = product.SKU,
             CategoryId = product.CategoryId,
             Price = product.Price,
+            Rating = product.Rating,
 
         };
 
@@ -178,6 +180,7 @@ namespace Pronia.Areas.Admin.Controllers;
             dbProduct.Price = vm.Price;
             dbProduct.SKU = vm.SKU;
             dbProduct.CategoryId = vm.CategoryId;
+            dbProduct.Rating = vm.Rating;
 
         string folderPath = Path.Combine(_environment.WebRootPath, "assets", "images", "website-images");
 

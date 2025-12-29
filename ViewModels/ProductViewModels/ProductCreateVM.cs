@@ -17,5 +17,8 @@ namespace Pronia.ViewModels.ProductViewModels
         public IFormFile MainImage { get; set; }
         [Required]
         public IFormFile HoverImage { get; set; }
+        [Required]
+        [Range(1, 5)]
+        public int Rating { get; set; }
     }
 }

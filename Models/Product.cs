@@ -20,5 +20,8 @@ namespace Pronia.Models
         public string MainImageUrl { get; set; }
         [Required]
         public string? HoverImageUrl { get; set; }
+        [Required]
+        [Range(1, 5)]
+        public int Rating { get; set; }
     }
 }

@@ -93,6 +93,9 @@ namespace Pronia.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
                     b.Property<string>("SKU")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

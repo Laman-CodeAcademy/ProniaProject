@@ -11,7 +11,8 @@
                     <th scope="col">Desciprtion</th>
                     <th scope="col">Image</th>
                     <th scope="col">Price</th>
-                    <th scope="col">Category Name</th>
+                        <th scope="col">Category Name</th>
+                        <th scope="col">Rating</th>
                     <th scope="col">Actions</th>
 
 
@@ -28,6 +29,7 @@
                         <td><img src="~/assets/images/website-images/@product.MainImageUrl" alt="Alternate Text" width=30px; height=30px /></td>
                         <td>@product.Price</td>
                         <td>@product.Category.Name</td>
+                            <td>@product.Rating</td>
                         <td>
 
                             <a class="btn btn-warning" asp-action="Update" asp-route-id="@product.Id">Update</a>
