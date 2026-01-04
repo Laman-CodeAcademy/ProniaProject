@@ -21,6 +21,9 @@
 
         public int Rating { get; set; }
 
+        public List<string> TagNames { get; set; }
+        public List<string> ImageUrls { get; set; }
+
 
     }
 }

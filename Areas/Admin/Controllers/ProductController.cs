@@ -11,10 +11,11 @@ namespace Pronia.Areas.Admin.Controllers;
     public class ProductController(AppDbContext _context, IWebHostEnvironment _environment) : Controller
     {
 
-        private void SendCategoriesWithViewBag()
+        private void SendItemsWithViewBag()
         {
             ViewBag.Categories = _context.Categories.ToList();
-        }
+            ViewBag.Tags = _context.Tags.ToList();
+    }
 
         public IActionResult Index()
         {
@@ -28,7 +29,7 @@ namespace Pronia.Areas.Admin.Controllers;
         [HttpGet]
         public IActionResult Create()
         {
-            SendCategoriesWithViewBag();
+            SendItemsWithViewBag();
             return View();
         }
 
@@ -38,7 +39,7 @@ namespace Pronia.Areas.Admin.Controllers;
         {
             if (!ModelState.IsValid)
             {
-                SendCategoriesWithViewBag();
+                SendItemsWithViewBag();
                 return View(vm);
             }
 
@@ -66,13 +67,27 @@ namespace Pronia.Areas.Admin.Controllers;
                 return View(vm);
             }
 
+            foreach(var image in vm.Images)
+        {
+            if (!image.CheckType("image"))
+            {
+                ModelState.AddModelError("Image", "u can only upload image file");
+                return View(vm);
+            }
+            if (!vm.MainImage.CheckSize(2))
+            {
+                ModelState.AddModelError("Image", "u can only upload images less than 2mb");
+                return View(vm);
+            }
+        }
+
         bool existsCategory = _context.Categories
                 .Any(c => c.Id == vm.CategoryId);
 
             if (!existsCategory)
             {
                 ModelState.AddModelError("CategoryId", "Category is not valid");
-                SendCategoriesWithViewBag();
+                SendItemsWithViewBag();
                 return View(vm);
             }
 
@@ -92,9 +107,37 @@ namespace Pronia.Areas.Admin.Controllers;
             Rating = vm.Rating,
             MainImageUrl = mainImageUniqueName,
             HoverImageUrl = hoverImageUniqueName,
-
-
         };
+
+        foreach(var image in vm.Images)
+        {
+            string imageUniqueName = image.SaveFile(folderPath);
+            ProductImage productImage = new ProductImage()
+            {
+                ImageUrl = imageUniqueName,
+                Product = product,
+            };
+            product.ProductImages.Add(productImage);
+        }
+
+        foreach (var tagId in vm.TagIds)
+        {
+            var IsExistTag = _context.Tags.Any(x => x.Id == tagId);
+
+            if(IsExistTag is false)
+            {
+                SendItemsWithViewBag();
+                ModelState.AddModelError("", "tag not found");
+                return View(vm);
+            }
+
+            ProductTag productTag = new ProductTag()
+            {
+                TagId = tagId,
+                Product = product,
+            };
+            product.ProductTags.Add(productTag); 
+        }
 
             _context.Products.Add(product);
             _context.SaveChanges();
@@ -105,11 +148,11 @@ namespace Pronia.Areas.Admin.Controllers;
         [HttpGet]
         public IActionResult Update(int id)
         {
-            var product = _context.Products.Find(id);
+            var product = _context.Products.Include(x=>x.ProductTags).Include(x => x.ProductImages).FirstOrDefault(x=>x.Id==id);
             if (product == null)
                 return NotFound();
 
-            SendCategoriesWithViewBag();
+            SendItemsWithViewBag();
 
         ProductUpdateVM vm = new ProductUpdateVM()
         {
@@ -120,10 +163,12 @@ namespace Pronia.Areas.Admin.Controllers;
             CategoryId = product.CategoryId,
             Price = product.Price,
             Rating = product.Rating,
-
+            TagIds = product.ProductTags.Select(x => x.TagId).ToList(),
+            ImageUrls = product.ProductImages.Select(x => x.ImageUrl).ToList(),
+            ImageIds = product.ProductImages.Select(x => x.Id).ToList(),
         };
 
-            return View(product);
+            return View(vm);
         }
 
         [HttpPost]
@@ -132,11 +177,11 @@ namespace Pronia.Areas.Admin.Controllers;
         {
             if (!ModelState.IsValid)
             {
-                SendCategoriesWithViewBag();
+                SendItemsWithViewBag();
                 return View(vm);
             }
 
-        var dbProduct = _context.Products.Find(vm.Id);
+        var dbProduct = _context.Products.Include(x=>x.ProductTags).Include(x => x.ProductImages).FirstOrDefault(x=>x.Id==vm.Id);
         if (dbProduct == null)
             return NotFound();
 
@@ -146,9 +191,21 @@ namespace Pronia.Areas.Admin.Controllers;
             if (!existsCategory)
             {
                 ModelState.AddModelError("CategoryId", "Category is not valid");
-                SendCategoriesWithViewBag();
+                SendItemsWithViewBag();
                 return View(vm);
             }
+
+        foreach (var tagId in vm.TagIds)
+        {
+            var isExistTag = _context.Tags.Any(x => x.Id == tagId);
+
+            if (isExistTag is false)
+            {
+                SendItemsWithViewBag();
+                ModelState.AddModelError("", "tag not found");
+                return View(vm);
+            }
+        }
 
         //MainImage
         if (!vm.MainImage?.CheckType("image")?? false)
@@ -197,14 +254,36 @@ namespace Pronia.Areas.Admin.Controllers;
             dbProduct.HoverImageUrl = newHoverImage;
         }
 
-        _context.SaveChanges();
+        dbProduct.ProductTags = [];
 
+        foreach(var tagId in vm.TagIds)
+        {
+            ProductTag productTag = new ProductTag()
+            {
+                TagId = tagId,
+                ProductId=dbProduct.Id,
+            };
+            dbProduct.ProductTags.Add(productTag);
+        }
+
+        foreach (var productImage in dbProduct.ProductImages.ToList())
+        {
+            var isExistImage = vm.ImageIds.Any(x => x == productImage.Id);
+
+            if (isExistImage is false)
+            {
+               dbProduct.ProductImages.Remove(productImage);
+                ExtensionMethods.DeleteFile(folderPath, productImage.ImageUrl);
+            }
+        }
+
+        _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Delete(int id)
         {
-            var product = _context.Products.Find(id);
+            var product = _context.Products.Include(x=>x.ProductImages).FirstOrDefault(x=>x.Id==id);
             if (product == null)
                 return NotFound();
             _context.Products.Remove(product);
@@ -215,12 +294,37 @@ namespace Pronia.Areas.Admin.Controllers;
         ExtensionMethods.DeleteFile(folderPath, product.MainImageUrl);
         ExtensionMethods.DeleteFile(folderPath, product.HoverImageUrl);
 
+        foreach(var image in product.ProductImages)
+        {
+            ExtensionMethods.DeleteFile(folderPath, image.ImageUrl);
+        }
 
         return RedirectToAction(nameof(Index));
         }
 
 
-
+        public IActionResult Detail(int id)
+    {
+        var product = _context.Products.Select(x => new ProductGetVM()
+        {
+            Id = x.Id,
+            Name = x.Name,
+            CategoryName=x.Category.Name,
+            Description = x.Description,
+            SKU = x.SKU,
+            Price = x.Price,
+            Rating = x.Rating,
+            MainImageUrl = x.MainImageUrl,
+            HoverImageUrl = x.HoverImageUrl,
+            TagNames=x.ProductTags.Select(x =>x.Tag.Name).ToList(),
+            ImageUrls=x.ProductImages.Select(x => x.ImageUrl).ToList(),
+        }).FirstOrDefault(x=>x.Id == id);
+        if (product == null)
+            return NotFound();
+       
+        return View(product);
+       
+    }
 
 
 

@@ -29,19 +29,48 @@
         </div>
 
         <div class="form-group mb-3">
+            <img src="~/assets/images/website-images/@Model.MainImageUrl" alt="Alternate Text" />
+            <input type="hidden" asp-for="MainImageUrl" />
             <label asp-for="MainImage" class="form-label">MainImage </label>
             <input asp-for="MainImage"
                    class="form-control"
-                   placeholder="https://example.com/image.jpg" />
+                   />
             <span asp-validation-for="MainImage" class="text-danger"></span>
         </div>
         <div class="form-group mb-3">
+            <img src="~/assets/images/website-images/@Model.HoverImageUrl" alt="Alternate Text" />
+            <input type="hidden" asp-for="HoverImageUrl" />
             <label asp-for="HoverImage" class="form-label">HoverImage </label>
             <input asp-for="HoverImage"
                    class="form-control"
-                   placeholder="https://example.com/image.jpg" />
+                   />
             <span asp-validation-for="HoverImage" class="text-danger"></span>
         </div>
+        <div class="form-group mb-3">
+            <label class="form-label">Existing Images</label>
+
+            <div class="d-flex flex-wrap gap-3">
+                @for (int i = 0; i < Model.ImageUrls.Count; i++)
+                {
+                    string imageUrl = Model.ImageUrls[i];
+
+                    <div class="position-relative image-box" >
+                        <img src="~/assets/images/website-images/@imageUrl"
+                             width="120"
+                             class="img-thumbnail" />
+
+                        <button type="button"
+                                class="btn btn-danger btn-sm position-absolute top-0 end-0 remove-image">
+                            ✕
+                        </button>
+
+                        <input type="hidden" asp-for="ImageUrls" value="@imageUrl[i]" />
+                        <input type="hidden" asp-for="ImageIds" value="@Model.ImageIds" />
+                    </div>
+                }
+            </div>
+        </div>
+
 
         <div class="form-group mb-4">
             <label asp-for="Price" class="form-label"> Price</label>
@@ -85,6 +114,24 @@
             <span asp-validation-for="CategoryId" class="text-danger small"></span>
         </div>
 
+        @* tags *@
+        <div class="form-group mb-4">
+            <label for="exampleInputEmail1">
+                Tag
+            </label>
+            <select asp-for="TagIds">
+
+                @foreach (Tag tag in ViewBag.Tags)
+                {
+                    <option value="@tag.Id">
+                        @tag.Name
+                    </option>
+                }
+            </select>
+
+            <span asp-validation-for="TagIds" class="text-danger small"></span>
+        </div>
+
         <div class="form-group mb-4">
             <label asp-for="Rating" class="form-label"> Rating</label>
             <input asp-for="Rating"
@@ -110,3 +157,13 @@
     </form>
 
 </div>
+
+<script>
+    const removeButtons = document.querySelectorAll('.remove-image');
+           removeButtons.forEach(button => {
+               button.addEventListener('click', function () {
+                   const parentDiv = this.parentElement;
+                   parentDiv.remove();
+               });
+              });
+</script>

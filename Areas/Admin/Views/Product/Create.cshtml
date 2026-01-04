@@ -32,15 +32,23 @@
             <label asp-for="MainImage" class="form-label">MainImage</label>
             <input asp-for="MainImage"
                    class="form-control"
-                   placeholder="https://example.com/image.jpg" />
+                   placeholder="" />
             <span asp-validation-for="MainImage" class="text-danger"></span>
         </div>
         <div class="form-group mb-3">
             <label asp-for="HoverImage" class="form-label">HoverImage</label>
             <input asp-for="HoverImage"
                    class="form-control"
-                   placeholder="https://example.com/image.jpg" />
+                   placeholder="" />
             <span asp-validation-for="HoverImage" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Images" class="form-label">Images</label>
+            <input asp-for="Images"
+                   class="form-control"
+                   placeholder="" />
+            <span asp-validation-for="Images" class="text-danger"></span>
         </div>
 
         <div class="form-group mb-4">
@@ -64,7 +72,7 @@
             <span asp-validation-for="SKU" class="text-danger"></span>
         </div>
        
-
+        @* categories *@
         <div class="form-group mb-4">
             <label asp-for="CategoryId" class="form-label ">
                 Category
@@ -82,6 +90,41 @@
             </select>
 
             <span asp-validation-for="CategoryId" class="text-danger small"></span>
+        </div>
+
+        <div class="form-group mb-4">
+            <label for="exampleInputEmail1">
+                Category
+            </label>
+            <select asp-for="CategoryId">
+
+                @foreach (Category category in ViewBag.Categories)
+                {
+                    <option value="@category.Id">
+                        @category.Name
+                    </option>
+                }
+            </select>
+
+            <span asp-validation-for="CategoryId" class="text-danger small"></span>
+        </div>
+
+        @* tags *@
+        <div class="form-group mb-4">
+            <label for="exampleInputEmail1">
+                Tag
+            </label>
+            <select asp-for="TagIds">
+
+                @foreach (Tag tag in ViewBag.Tags)
+                {
+                    <option value="@tag.Id">
+                        @tag.Name
+                    </option>
+                }
+            </select>
+
+            <span asp-validation-for="TagIds" class="text-danger small"></span>
         </div>
 
         <div class="form-group mb-4">

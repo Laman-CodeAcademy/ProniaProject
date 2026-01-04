@@ -13,6 +13,7 @@ namespace Pronia.ViewModels.ProductViewModels
         [Required]
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
+        public List<int> TagIds{ get; set; } 
         [Required]
         public IFormFile MainImage { get; set; }
         [Required]
@@ -20,5 +21,6 @@ namespace Pronia.ViewModels.ProductViewModels
         [Required]
         [Range(1, 5)]
         public int Rating { get; set; }
+        public List<IFormFile> Images { get; set; } = [];
     }
 }

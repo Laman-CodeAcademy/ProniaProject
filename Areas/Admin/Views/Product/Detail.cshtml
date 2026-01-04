@@ -1,0 +1,28 @@
+﻿@Model ProductGetVM
+
+<div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="~/assets/images/website-images/@Model.MainImageUrl" alt="Card image cap">
+    <img class="card-img-top" src="~/assets/images/website-images/@Model.HoverImageUrl" alt="Card image cap">
+        <li class="list-group-item">
+            Images: @foreach(var image in Model.ImageUrls)
+            {
+            <img class="card-img-top" src="~/assets/images/website-images/@Model.image" alt="Card image cap">
+            }
+        </li>
+
+    <div class="card-body">
+        <h5 class="card-title">Name: @Model.Name</h5>
+        <p class="card-text">Description: @Model.Description</p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Category: @Model.CategoryName</li>
+        <li class="list-group-item">SKU: @Model.SKU</li>
+        <li class="list-group-item">Price: @Model.Price</li>
+        <li class="list-group-item">Tags: @foreach(var tagName in Model.TagNames)
+            {
+                <span>@tagName</span>
+            }
+        </li>
+    </ul>
+   
+</div>
