@@ -64,8 +64,8 @@
                             ✕
                         </button>
 
-                        <input type="hidden" asp-for="ImageUrls" value="@imageUrl[i]" />
-                        <input type="hidden" asp-for="ImageIds" value="@Model.ImageIds" />
+                        <input type="hidden" asp-for="ImageUrls" value="@imageUrl" />
+                        <input type="hidden" asp-for="ImageIds" value="@Model.ImageIds[i]" />
                     </div>
                 }
             </div>
