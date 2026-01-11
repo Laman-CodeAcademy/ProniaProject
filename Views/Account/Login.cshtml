@@ -1,0 +1,40 @@
+﻿@model LoginVM
+<div class="col-lg-12">
+    <form action="#">
+        <div class="login-form">
+            <h4 class="login-title">Login</h4>
+            <div class="row">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="col-lg-12">
+                    <label asp-for="EmailAddress">EmailAddress*</label>
+                    <input  asp-for="EmailAddress" type="email" placeholder="Email Address" />
+                    <span asp-validation-for="EmailAddress " class="text-danger"></span>
+                </div>
+                <div class="col-lg-12">
+                    <label asp-for="Password">Password</label >
+                    <input asp-for="Password" type="password" placeholder="Password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+
+                </div>
+                <div class="col-md-8">
+                    <div class="check-box">
+                        <input asp-for="isRemember" type="checkbox" id="remember_me" />
+                        <label asp-for="isRemember" for="remember_me">Remember me</label>
+                        <span asp-validation-for="isRemember" class="text-danger"></span>
+
+                    </div>
+                </div>
+                <div class="col-md-4 pt-1 mt-md-0">
+                    <div class="forgotton-password_info">
+                        <a href="#"> Forgotten pasward?</a>
+                    </div>
+                </div>
+                <div class="col-lg-12 pt-5">
+                    <button class="btn btn-custom-size lg-size btn-pronia-primary">
+                        Login
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
